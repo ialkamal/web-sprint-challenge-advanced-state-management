@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import Smurf from "./Smurf";
 import { connect } from "react-redux";
+import { Switch, Route, Link } from "react-router-dom";
 import { getSmurfs, addSmurf } from "../actions";
 import "./App.css";
 
@@ -41,42 +43,59 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>SMURFS! W/Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
-        {this.props.isLoading && "Loading..."}
-        {this.props.isError ? (
-          <div>Error: {this.props.error}</div>
-        ) : (
-          this.props.smurfs.map((smurf) => (
-            <pre key={smurf.id}>{JSON.stringify(smurf, null, 2)}</pre>
-          ))
-        )}
-        <form>
-          <input
-            type="text"
-            name="name"
-            placeholder="name"
-            value={this.state.smurf.name}
-            onChange={this.handleChange}
+        <Switch>
+          <Route path="/smurfs/:id">
+            <Smurf />
+          </Route>
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return (
+                <>
+                  <h1>SMURFS! W/Redux</h1>
+                  <div>Welcome to your state management version of Smurfs!</div>
+                  <div>Start inside of your `src/index.js` file!</div>
+                  <div>Have fun!</div>
+                  {this.props.isLoading && "Loading..."}
+                  {this.props.isError ? (
+                    <div>Error: {this.props.error}</div>
+                  ) : (
+                    this.props.smurfs.map((smurf) => (
+                      <Link to={`/smurfs/${smurf.id}`} key={smurf.id}>
+                        <pre>{JSON.stringify(smurf, null, 2)}</pre>
+                      </Link>
+                    ))
+                  )}
+                  <form>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="name"
+                      value={this.state.smurf.name}
+                      onChange={this.handleChange}
+                    />
+                    <input
+                      type="text"
+                      name="age"
+                      placeholder="age"
+                      value={this.state.smurf.age}
+                      onChange={this.handleChange}
+                    />
+                    <input
+                      type="text"
+                      name="height"
+                      placeholder="height"
+                      value={this.state.smurf.height}
+                      onChange={this.handleChange}
+                    />
+                    <button onClick={this.handleSubmit}>Add Smurf</button>
+                  </form>
+                </>
+              );
+            }}
           />
-          <input
-            type="text"
-            name="age"
-            placeholder="age"
-            value={this.state.smurf.age}
-            onChange={this.handleChange}
-          />
-          <input
-            type="text"
-            name="height"
-            placeholder="height"
-            value={this.state.smurf.height}
-            onChange={this.handleChange}
-          />
-          <button onClick={this.handleSubmit}>Add Smurf</button>
-        </form>
+        </Switch>
       </div>
     );
   }

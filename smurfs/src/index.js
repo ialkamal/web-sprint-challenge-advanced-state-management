@@ -9,7 +9,7 @@ import reducer from "./reducers";
 import "./index.css";
 import App from "./components/App";
 
-const store = createStore(reducer, applyMiddleware(thunk, logger));
+export const store = createStore(reducer, applyMiddleware(thunk, logger));
 
 ReactDOM.render(
   <Router>
